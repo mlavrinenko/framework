@@ -115,6 +115,15 @@ class AopComposerLoader
                 $loader[0] = new AopComposerLoader($loader[0], $container, $options);
                 self::$wasInitialized = true;
             }
+
+            // Can't unregister unprefixed classname. PHP bug?
+            if (is_array($loaderToUnregister) &&
+                is_string($loaderToUnregister[0]) &&
+                substr($loaderToUnregister[0], 0, 1) !== '\\'
+            ) {
+                $loaderToUnregister[0] = "\\{$loaderToUnregister[0]}";
+            }
+
             spl_autoload_unregister($loaderToUnregister);
         }
         unset($loader);
