@@ -115,7 +115,8 @@ final class SelfValueVisitor extends NodeVisitorAbstract
         $name->setAttribute('originalName', $originalName);
 
         $fullClassName    = Name::concat($this->namespace, $this->className);
-        $resolvedSelfName = new FullyQualified('\\' . $fullClassName->toString(), $name->getAttributes());
+        $leadingingSlash = count($fullClassName->parts) == 2 && empty($fullClassName->parts[0]) ? '' : '\\';
+        $resolvedSelfName = new FullyQualified($leadingingSlash . $fullClassName->toString(), $name->getAttributes());
 
         $this->replacedNodes[] = $resolvedSelfName;
 
